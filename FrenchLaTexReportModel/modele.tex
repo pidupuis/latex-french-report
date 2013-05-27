@@ -2,44 +2,15 @@
 
 \include{config/config}% Fichier determinant la langue, les donnees d'auteur, etc
 
-
+% Package pour les equations
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathrsfs}
 
-\usepackage{color}
-\definecolor{colKeys}{RGB}{0,51,153}
-\definecolor{colIdentifier}{rgb}{0,0,0} % En rgb, les valeurs sont comprises entre 0 et 1.
-\definecolor{colComments}{RGB}{20,148,20} % En RGB, les valeurs sont comprises entre 0 et 255.
-\definecolor{colString}{RGB}{133,6,6}
-\definecolor{colfont}{RGB}{239,239,239}
-
-\usepackage{listings}
-\usepackage{courier}
-\lstset{basicstyle=\scriptsize, % Change la taille du code.
-		identifierstyle=\textbf{\color{colIdentifier}}, % Couleur des variables.
-		keywordstyle=\color{colKeys}, % Couleur des des fonctions.
-		stringstyle=\color{colString}, % Couleur des chaines de caractères.
-		commentstyle=\color{colComments}, % Couleur des commentaires.
-		columns=flexible, % Rend les colonnes flexibles.
-		captionpos=b,% Place la légende en bas (bottom).
-		numbers=left, % Affiche les numéros de ligne.
-		numberstyle=\scriptsize, % Change la taille des numéros de ligne.
-		showspaces=false, % Retire les underscores marquant les espaces dans les commentaires.
-		showstringspaces=false, % Retire les underscores marquant les espaces dans les strings.
-		frame=single, % Ajoute un cadre autour du code.
-		tabsize=2, % Modifie la taille des tabulations.
-		breaklines=true, % Fais automatiquement des retour à la ligne.
-		basicstyle=\ttfamily,
-		%title=\lstname % Affiche un titre (ici, contenant le nom du fichier.
-		breakatwhitespace=false, % Pas de break quand espaces blancs.
-		xrightmargin=2cm, % Marge à droite.
-		xleftmargin=2cm, % Marge à gauche.
-		backgroundcolor=\color{colfont}, % Couleur de font.
-		language=R%
-}
-
-
+\usepackage{sourcecode} % Package pour le code source
+\shorthandoff{!}
+\lstset{language=R}
+\shorthandon{!}
 
 % CONTENTS
 \begin{document}
@@ -48,19 +19,18 @@
 \maketitle% Ajout de la page de garde.
 \newpage
 
-% Table des matieres
-\tableofcontents % Sans argument : Sommaire
+  % Table des matieres
+  \tableofcontents % Sans argument : Sommaire
 
-\include{include/export}
+    % Corps du texte
+    \include{include/export}
 
+  % Tables
+  \listoffigures[Figures] % Tables des figures
 
-\listoffigures[Figures]
-
-\nocite{*}
-\bibliographystyle{plain}
-\renewcommand{\bibname}{References}
-\bibliography{modele}
-
-
+  \nocite{*} % Bibliographie
+  \bibliographystyle{plain}
+  \renewcommand{\bibname}{References}
+  \bibliography{modele}
 
 \end{document}
