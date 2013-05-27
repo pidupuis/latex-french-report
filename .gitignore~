@@ -30,7 +30,6 @@
 *.vrb
 *.xdy
 *.tdo
-*.pdf
 
 *.acn~
 *.acr~
@@ -64,5 +63,4 @@
 *.vrb~
 *.xdy~
 *.tdo~
-*.pdf~
 *.tex~
