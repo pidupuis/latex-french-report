@@ -2,16 +2,6 @@
 
 \include{config/config}% Fichier determinant la langue, les donnees d'auteur, etc
 
-% Package pour les equations
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{mathrsfs}
-
-\usepackage{sourcecode} % Package pour le code source
-\shorthandoff{!}
-\lstset{language=R}
-\shorthandon{!}
-
 % CONTENTS
 \begin{document}
 
@@ -19,18 +9,10 @@
 \maketitle% Ajout de la page de garde.
 \newpage
 
-  % Table des matieres
-  \tableofcontents % Sans argument : Sommaire
+% Table des matieres
+\tableofcontents % Sans argument : Sommaire
 
-    % Corps du texte
-    \include{include/export}
-
-  % Tables
-  \listoffigures[Figures] % Tables des figures
-
-  \nocite{*} % Bibliographie
-  \bibliographystyle{plain}
-  \renewcommand{\bibname}{References}
-  \bibliography{modele}
+% Corps du texte
+\include{include/export}
 
 \end{document}

@@ -49,7 +49,7 @@
 \renewcommand*\listoffigures[1][Liste des figures] {%
 	\setlength{\parskip}{0cm plus 0cm minus 0cm}% On retire l'interligne pour ne pas trop espacer les titres
 	\let\chapter\chapterOld% On remet l'ancienne version de chapter pour que le sommaire s'affiche convenablement
-	\renewcommand*\listfigurename{\textsc{{#1}}}% On renomme le titre de la table des matiere avec l'argument (Sommaire par defaut)
+	\renewcommand*\listfigurename{\textsc{{#1}}}% On renomme le titre de la table des matiere avec l'argument (Liste des figures par defaut)
 	\listoffiguresOld% On affiche la table des matieres.
 	\cfoot{}% On retire le numero de page dans le pied de page.
 	\thispagestyle{fancy}% On donne a la page de sommaire le style avec header et footer.
