@@ -1,3 +1,10 @@
+%% 
+%% Created by Pierre DUPUIS - 2012-2013
+%% Package which allow the user to display source codes inside his document.
+%% No programming language is specified here to allow the user to use any of them.
+%%
+%%
+
 %% Informations générales
 \NeedsTeXFormat{LaTeX2e}[1999/01/01]
 \ProvidesPackage{sourcecode}[2013]
@@ -5,19 +12,21 @@
 %% Chargement des extensions
 \RequirePackage{color}
 \RequirePackage{listings}
-\RequirePackage{courier}
+\RequirePackage{courier} % Courrier font for source code
 
 %% Déclaration des options
 \DeclareOption*{}%% Ne rien faire quand une option est inconnue
 \ProcessOptions
 
 %% Définition des commandes
+% Colors
 \definecolor{colKeys}{RGB}{0,51,153}
-\definecolor{colIdentifier}{rgb}{0,0,0} % En rgb, les valeurs sont comprises entre 0 et 1.
-\definecolor{colComments}{RGB}{20,148,20} % En RGB, les valeurs sont comprises entre 0 et 255.
+\definecolor{colIdentifier}{rgb}{0,0,0} % En "rgb", les valeurs sont comprises entre 0 et 1.
+\definecolor{colComments}{RGB}{20,148,20} % En "RGB", les valeurs sont comprises entre 0 et 255.
 \definecolor{colString}{RGB}{133,6,6}
 \definecolor{colfont}{RGB}{239,239,239}
 
+% Displaying specifications
 \lstset{basicstyle=\scriptsize, % Change la taille du code.
 		identifierstyle=\textbf{\color{colIdentifier}}, % Couleur des variables.
 		keywordstyle=\color{colKeys}, % Couleur des des fonctions.
