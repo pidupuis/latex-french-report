@@ -1,3 +1,9 @@
+%% 
+%% Created by Pierre DUPUIS - 2012-2013
+%% Document class which modify the classical report to be closer the french student habits
+%%
+%%
+
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{frenchreport}
 
@@ -129,7 +135,7 @@
 }%
 
 % FIGURE
-\newcommand*\fig[3]{%
+\newcommand*\fig[3]{% Fonction qui affiche une image de maniere centree et accompagnee de sa legende
       \begin{figure}[h!]%
       \begin{center}%
       	\includegraphics[scale={#2}]{{#1}}%
@@ -139,7 +145,7 @@
       \end{figure}%
 }%
 
-\newcommand*\figRotate[4]{%
+\newcommand*\figRotate[4]{% Fonction qui affiche une figure selon un certain angle de rotation (utile pour les figures au format paysage)
       \begin{figure}[h!]%
       \begin{center}%
       	\includegraphics[scale={#2}, angle={#4}]{{#1}}%
