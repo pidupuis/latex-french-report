@@ -1,5 +1,4 @@
 
-
 FrenchLaTeXReportModel
 ======================
 
@@ -88,4 +87,4 @@ In this example this is the including of the export.tex file. This is typically 
 > \vspace*{5mm} \begin{lstlisting} <br \>
 > qt(c(0.975), df=9, lower.tail=TRUE) <br \>
 > [1] 2.262157 <br \>
-> \end{lstlisting} <br \>
+> \end{lstlisting} \par <br \>
