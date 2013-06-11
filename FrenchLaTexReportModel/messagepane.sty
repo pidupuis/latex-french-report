@@ -33,7 +33,7 @@
 				\newlength{\myl} %
 				\settowidth{\myl}{{#3}} % On recupere la taille du texte
 				\ifthenelse{\lengthtest{\myl > 400pt}}{ % Si le texte depasse les 400pt
-					\parbox{10cm}{{#3}} % On prend une boite gerant les paragraphes et on lui limite la taille a 10cm
+					\parbox{12cm}{{#3}} % On prend une boite gerant les paragraphes et on lui limite la taille a 10cm
 				}{ % Sinon
 					\makebox{\textwidth}{{#3}} % On prend une boite s'adaptant a la taille du texte
 				}%
