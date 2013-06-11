@@ -1,7 +1,7 @@
 %% 
-%% Created by Pierre DUPUIS - 2012-2013
-%% Package which allow the user to display source codes inside his document.
-%% No programming language is specified here to allow the user to use any of them.
+%% Created by Pierre DUPUIS - 2013
+%% Package which provides some practical message pane.
+%% The user can display a successful message, an error message, a warning message or an information message.
 %%
 %%
 
@@ -15,7 +15,7 @@
 \RequirePackage{ifthen}
 \RequirePackage{calc}
 \RequirePackage{graphicx}
-\RequirePackage{pstricks}
+\RequirePackage{tikz}
 
 %% Déclaration des options
 \DeclareOption*{}%% Ne rien faire quand une option est inconnue
@@ -23,48 +23,46 @@
 
 % MESSAGE PANE
 \newcommand*\messagePane[3]{% 
-	\begin{center}
-		\phantom \\
-		\hspace*{-10mm}
-		\setlength{\fboxsep}{15pt}
-		\fcolorbox{#1!80}{#1!20}{
-			\hspace*{-5mm}
-			\begin{array}{l}
-				\includegraphics[scale=0.5]{{#2}}
-			\end{array}
-			\newlength{\myl}
-			\settowidth{\myl}{{#3}}
-			\ifthenelse{\lengthtest{\myl > 400pt}}{
-				\parbox{\textwidth}{{#3}}
-			}{
-				\makebox{\textwidth}{{#3}}
-			}
-		}
-	\end{center}
-	\par
+	\begin{center} % Centre le panel
+		\phantom \\ % Ajoute un caractere invisible suivi d'un saut a la ligne pour mettre de l'espace en retirant l'indentation
+		\begin{tikzpicture} % Bloc definissant le panel
+			\node[draw=#1!80,fill=#1!20, rounded corners=5pt, inner sep=5mm]{ % On definit la boite avec les couleurs, les coins arrondis et les marges interieures
+				\begin{array}{l} % On cree un tableau d'une case
+					\includegraphics[scale=0.5]{{#2}} % On affiche l'icone correspondant au message
+				\end{array} %
+				\newlength{\myl} %
+				\settowidth{\myl}{{#3}} % On recupere la taille du texte
+				\ifthenelse{\lengthtest{\myl > 400pt}}{ % Si le texte depasse les 400pt
+					\parbox{10cm}{{#3}} % On prend une boite gerant les paragraphes et on lui limite la taille a 10cm
+				}{ % Sinon
+					\makebox{\textwidth}{{#3}} % On prend une boite s'adaptant a la taille du texte
+				}%
+			};%
+		\end{tikzpicture}%
+	\end{center}%
+	\par% On clot le paragraphe pour retrouver l'indentation du prochain paragraphe
 }%
 
 % ERROR PANE
-\newcommand*\errorPane[1]{% 
-	\messagePane{red}{img/error.png}{{#1}}
+\newcommand*\errorPane[1]{% Panel specifique pour afficher une erreur
+	\messagePane{red}{img/error.png}{{#1}} % Herite du message pane
 }%
 
 % WARNING PANE
-\newcommand*\warningPane[1]{% 
-	\messagePane{orange}{img/warning.png}{{#1}}	
+\newcommand*\warningPane[1]{% Panel specifique pour afficher un warning
+	\messagePane{orange}{img/warning.png}{{#1}} % Herite du message pane
 }%
 
 % SUCCESS PANE
-\newcommand*\successPane[1]{% 
-	\messagePane{green}{img/success.png}{{#1}}	
+\newcommand*\successPane[1]{% Panel specifique pour afficher un succes
+	\messagePane{green}{img/success.png}{{#1}} % Herite du message pane	
 }%
 
 % INFO PANE
-\newcommand*\infoPane[1]{% 
-	\messagePane{blue}{img/info.png}{{#1}}
+\newcommand*\infoPane[1]{% Panel specifique pour afficher une information
+	\messagePane{blue}{img/info.png}{{#1}} % Herite du message pane
 }%
 
 %% Fin du package
 \endinput
-
 
