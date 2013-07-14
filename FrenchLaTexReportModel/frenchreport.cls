@@ -163,6 +163,27 @@
 \newcommand*\subtitle[1]{%
 	\newcommand*\@subtitle{{#1}}% Si subtitle est invoque, on cree une variable du meme nom
 }%
+\newcommand*\formation[1]{%
+	\newcommand*\@formation{{#1}}% Si formation est invoque, on cree une variable du meme nom
+}%
+\newcommand*\mention[1]{%
+	\newcommand*\@mention{{#1}}% Si mention est invoque, on cree une variable du meme nom
+}%
+\newcommand*\emphasis[1]{%
+	\newcommand*\@emphasis{{#1}}% Si emphasis est invoque, on cree une variable du meme nom
+}%
+\newcommand*\societe[1]{%
+	\newcommand*\@societe{{#1}}% Si societe est invoque, on cree une variable du meme nom
+}%
+\newcommand*\address[1]{%
+	\newcommand*\@address{{#1}}% Si address est invoque, on cree une variable du meme nom
+}%
+\newcommand*\supervisor[1]{%
+	\newcommand*\@supervisor{{#1}}% Si supervisor est invoque, on cree une variable du meme nom
+}%
+\newcommand*\dates[1]{%
+	\newcommand*\@dates{{#1}}% Si dates est invoque, on cree une variable du meme nom
+}%
 \newcommand*\llogo[2]{%
 	\newcommand*\@llogo{% Logo a gauche (l)
 		\includegraphics[scale={#2}]{{#1}}% Si llogo est invoque, on cree un variable du meme nom qui affiche la figure
@@ -178,13 +199,22 @@
 		\includegraphics[scale={#2}]{{#1}}%
 	}%
 }%
+\newcommand*\fllogo[2]{%
+	\newcommand*\@fllogo{% Logo en bas a gauche (fl)
+		\includegraphics[scale={#2}]{{#1}}%
+	}%
+}%
+\newcommand*\frlogo[2]{%
+	\newcommand*\@frlogo{% Logo en bas a droite (fr)
+		\includegraphics[scale={#2}]{{#1}}%
+	}%
+}%
 \newcommand*\banner[2]{%
 	\newcommand*\@banner{% Image pour illustrer la page de garde
 		\includegraphics[scale={#2}]{{#1}}%
 	}%
 }%
-\renewcommand*\maketitle{% On redefinit maketitle
-	\thispagestyle{empty}% On enleve pied de page et en-tete
+\newcommand*\maketitleCommun{%
 	\ifx\@clogo\@undefined% S'il n'y a pas de logo central (car generalement on en met que deux)
 		\noindent \@llogo \hspace*{\stretch{1}} \@rlogo% on affiche que les logos de gauche et droite
 	\else% sinon
@@ -208,6 +238,53 @@
 			\textsc{\@author} \\% affiche l'auteur en lettre capitale
 		\end{large}%
 	\end{center}%
-	\newpage% insere un saut de page
+}
+\newcommand*\maketitleGphy{%
+	\noindent \@llogo \hspace*{\stretch{1}} \@rlogo% on affiche un logo a gauche et a droite
+	\vfill% longueur elastique de coefficient 1 permettant de separer la page verticalement grace aux vfill suivant
+	\begin{center}%	
+		\@formation \\% On affiche l'intitule de la formation
+		\@mention \\% On affiche la mention relative a cette formation
+		\vspace*{5mm} \@emphasis \\% On affiche la specialite choisie dans cette formation
+		\begin{large}%
+			\vspace*{5mm} \@title \\% Affiche le titre
+		\end{large}%
+		\begin{LARGE}%
+			\hrulefill \\% On cree une ligne horizontale au dessus du sous-titre
+			\@subtitle \\% Affiche le sous-titre, ici le sujet de stage
+			\hrulefill% On cree une ligne horizontale en dessous du sous-titre
+		\end{LARGE}%
+		\vfill%
+		\ifx\@banner\@undefined% Si la banniere n'existe pas
+		\else% On ne fait rien, sinon
+			\@banner% On l'affiche
+		\fi%
+	\end{center}%
+	\noindent \@societe \\% On affiche le nom de la societe
+	\@address \\% On affiche l'adresse de la societe
+	\ifx\@dates\@undefined% si les dates de stage ne sont pas renseignees
+		\@date \\% affiche la date de compilation
+	\else% on ne fait rien, sinon
+		\@dates \\% on les affiche
+	\fi%
+	\@supervisor \\% On affiche le nom du superviseur
+	\@author \\% On affiche le nom de l'auteur
+	\vfill%
+	\noindent \@fllogo \hspace*{\stretch{1}} \@frlogo% on affiche un logo a gauche et a droite en bas de page
+}
+\renewcommand*\maketitle[1][commun]{% On redefinit maketitle avec comme argument par defaut "commun"
+	\thispagestyle{empty}% On enleve pied de page et en-tete
+	\def\communText{commun}% On stocke les valeurs possibles d'argument
+	\def\gphyText{gphy}%
+	\def\next{#1}% On stocke l'argument
+	\ifx\communText\next% Si l'argument vaut "commun"
+		\maketitleCommun% On utilise le skin commun
+	\else% Sinon
+		\ifx\gphyText\next% Si l'argument vaut "gphy"
+			\maketitleGphy% On utilise le skin gphy
+		\else% Sinon
+		\fi%
+	\fi%
+	\newpage% On insere un saut de page
 }%
 
