@@ -15,39 +15,30 @@
 % Packages
 \RequirePackage{fancyhdr}%
 \RequirePackage{graphicx}%
+\RequirePackage[colorlinks=true, linkcolor=black, urlcolor=black]{hyperref}
 
 % Header and footer
-\rhead{}%
-\chead{}%
-\lhead{}%
-\rfoot{}%
-\cfoot{\hspace{20mm}--- $\thepage$ ---}% On affiche le numero de page au centre du pied de page.
-\lfoot{}%
+\fancypagestyle{plain}{
+\fancyhf{}
+\fancyfoot[C]{\hspace{20mm}--- $\thepage$ ---}
+}
 \renewcommand*{\headrulewidth}{0px}% Retire le trait horizontal en dessous du header.
 \renewcommand*{\footrulewidth}{0px}% Retire le trait horizontal au dessus du footer.
 \setlength{\headheight}{23pt}% Correction erreur package fancyhdr.
-\pagestyle{fancy}% Positionne header et footer sur toutes les pages.
+
+\pagestyle{plain}% Positionne header et footer sur toutes les pages.
 
 % Sommaire
 \let\tableofcontentsOld\tableofcontents% On conserve l'ancienne commande pour eviter la recursivite.
 \renewcommand*\tableofcontents[1][Sommaire] {%
-	\let\thepageOld\thepage
-	\renewcommand*\thepage {%
-	}%
 	\setlength{\parskip}{0cm plus 0cm minus 0cm}% On retire l'interligne pour ne pas trop espacer les titres
 	\let\chapter\chapterOld% On remet l'ancienne version de chapter pour que le sommaire s'affiche convenablement
 	\renewcommand*\contentsname{\textsc{{#1}}}% On renomme le titre de la table des matiere avec l'argument (Sommaire par defaut)
+	\pdfbookmark{\contentsname}{toc}
 	\tableofcontentsOld% On affiche la table des matieres.
-	\cfoot{}% On retire le numero de page dans le pied de page.
-	\thispagestyle{fancy}% On donne a la page de sommaire le style avec header et footer.
 	\newpage% On cree une nouvelle page.
-	\pagenumbering{arabic}% On met les numeros en chiffres arabes.
-	\setcounter{page}{1}% On remet le compteur de page a 1.
-	\cfoot{\hspace{20mm}--- $\thepage$ ---}% On remet le numero de page dans le pied de page.
 	\let\chapter\chapterNew% On remet ensuite la nouvelle version de chapter.
-	\pagestyle{fancy}% Positionne header et footer sur toutes les pages.
 	\setlength{\parskip}{0.5cm plus 0.5cm minus 0cm}% On replace l'interligne a 1.5 pour le reste du rapport.
-	\let\thepage\thepageOld%
 }%
 
 % List of figures
@@ -56,26 +47,36 @@
 	\setlength{\parskip}{0cm plus 0cm minus 0cm}% On retire l'interligne pour ne pas trop espacer les titres
 	\let\chapter\chapterOld% On remet l'ancienne version de chapter pour que le sommaire s'affiche convenablement
 	\renewcommand*\listfigurename{\textsc{{#1}}}% On renomme le titre de la table des matiere avec l'argument (Liste des figures par defaut)
+	\addcontentsline{toc}{chapter}{\textsc{{#1}}}%
 	\listoffiguresOld% On affiche la table des matieres.
-	\cfoot{}% On retire le numero de page dans le pied de page.
 	\thispagestyle{fancy}% On donne a la page de sommaire le style avec header et footer.
 	\newpage% On cree une nouvelle page.
 	\let\chapter\chapterNew% On remet ensuite la nouvelle version de chapter.
-	\pagestyle{fancy}% Positionne header et footer sur toutes les pages.
 	\setlength{\parskip}{0.5cm plus 0.5cm minus 0cm}% On replace l'interligne a 1.5 pour le reste du rapport.
 }%
 
 % Bibliography
 \let\bibliographyOld\bibliography% On conserve l'ancienne commande pour eviter la recursivite.
-\renewcommand*\bibliography[1] {%
+\renewcommand*\bibliography[2][Références] {%
+	\bibliographystyle{plain} 
+	\renewcommand{\bibname}{\textsc{{#1}}}
 	\setlength{\parskip}{0cm plus 0cm minus 0cm}% On retire l'interligne pour ne pas trop espacer les titres
 	\let\chapter\chapterOld% On remet l'ancienne version de chapter pour que le sommaire s'affiche convenablement
-	\bibliographyOld{#1}% On affiche la table des matieres.
-	\cfoot{}% On retire le numero de page dans le pied de page.
-	\thispagestyle{fancy}% On donne a la page de sommaire le style avec header et footer.
+	\addcontentsline{toc}{chapter}{\textsc{{#1}}}%
+	\bibliographyOld{#2}% On affiche la table des matieres.
 	\newpage% On cree une nouvelle page.
 	\let\chapter\chapterNew% On remet ensuite la nouvelle version de chapter.
-	\pagestyle{fancy}% Positionne header et footer sur toutes les pages.
+	\setlength{\parskip}{0.5cm plus 0.5cm minus 0cm}% On replace l'interligne a 1.5 pour le reste du rapport.
+}%
+
+% Remerciements
+\newcommand*\remerciements[1][Remerciements]{%
+	\setlength{\parskip}{0cm plus 0cm minus 0cm}% On retire l'interligne pour ne pas trop espacer les titres
+	\let\chapter\chapterOld%
+	\addcontentsline{toc}{chapter}{\textsc{{#1}}}%
+	\chapter*{\textsc{{#1}}}%	
+	\vspace*{-10mm}%
+	\let\chapter\chapterNew%
 	\setlength{\parskip}{0.5cm plus 0.5cm minus 0cm}% On replace l'interligne a 1.5 pour le reste du rapport.
 }%
 
@@ -90,21 +91,17 @@
 \let\chapterOld\chapter% On conserve la premiere version de la commande chapter pour eviter la recursivite
 \renewcommand*\chapter[1]{%
 	\refstepcounter{chapterCounter}%
-	\chapterOld*{\uppercase\expandafter{\romannumeral \thechapterCounter} \hspace*{5mm} {#1}} % Chiffres romains majuscules
-	\addcontentsline{toc}{chapter}{\uppercase\expandafter{\romannumeral \thechapterCounter} \hspace*{5mm} {#1}}%
-	\thispagestyle{fancy}% Positionne header et footer sur toutes les pages.
-	\vspace*{-10mm}
+	\addcontentsline{toc}{chapter}{\uppercase\expandafter{\romannumeral \thechapterCounter} \hspace*{5mm} \textsc{{#1}}}%
+	\chapterOld*{\uppercase\expandafter{\romannumeral \thechapterCounter} \hspace*{5mm} \textsc{{#1}}} % Chiffres romains majuscules
+	\vspace*{-10mm}%
 }%
 \let\chapterNew\chapter % On cree une commande contenant la version modifiee de chapter pour la remettre dans sommaire
 
 % Chapter sans numerotation (intro, conclu, ...)
 \newcommand*\chapterExtra[1]{%
-	\let\chapter\chapterOld%
-	\chapter*{{#1}}
-	\addcontentsline{toc}{chapter}{{#1}}
-	\thispagestyle{fancy}%
-	\vspace*{-10mm}
-	\let\chapter\chapterNew%
+	\addcontentsline{toc}{chapter}{\textsc{{#1}}}%
+	\chapterOld*{\textsc{{#1}}} % Chiffres romains majuscules
+	\vspace*{-10mm}%
 }%
 
 % Section
@@ -112,8 +109,8 @@
 \renewcommand*\section[1]{%
 	\refstepcounter{sectionCounter}%
 	\vspace*{-5mm}%
-    	\sectionOld*{\hspace*{8mm} \thechapterCounter.\thesectionCounter \hspace*{5mm} {#1}}%
 	\addcontentsline{toc}{section}{\thechapterCounter.\thesectionCounter \hspace*{5mm} {#1}}%
+    	\sectionOld*{\hspace*{8mm} \thechapterCounter.\thesectionCounter \hspace*{5mm} {#1}}%
 }%
 
 % Subection
@@ -121,8 +118,8 @@
 \renewcommand*\subsection[1]{%
 	\refstepcounter{subsectionCounter}%
 	\vspace*{0mm}%
-    	\subsectionOld*{\hspace*{16mm} \thechapterCounter.\thesectionCounter.\thesubsectionCounter \hspace*{5mm} {#1}}%
 	\addcontentsline{toc}{section}{\hspace*{5mm} \thechapterCounter.\thesectionCounter.\thesubsectionCounter \hspace*{5mm} {#1}}%
+    	\subsectionOld*{\hspace*{16mm} \thechapterCounter.\thesectionCounter.\thesubsectionCounter \hspace*{5mm} {#1}}%
 }%
 
 % Subsection
@@ -130,8 +127,8 @@
 \renewcommand*\subsubsection[1]{%
 	\refstepcounter{subsubsectionCounter}%
 	\vspace*{0mm}%
-    	\subsubsectionOld*{\hspace*{24mm} \thechapterCounter.\thesectionCounter.\thesubsectionCounter.\thesubsubsectionCounter \hspace*{5mm} {#1}}%
 	\addcontentsline{toc}{section}{\hspace*{10mm} \thechapterCounter.\thesectionCounter.\thesubsectionCounter.\thesubsubsectionCounter \hspace*{5mm} {#1}}%
+    	\subsubsectionOld*{\hspace*{24mm} \thechapterCounter.\thesectionCounter.\thesubsectionCounter.\thesubsubsectionCounter \hspace*{5mm} {#1}}%
 }%
 
 % FIGURE
@@ -263,10 +260,10 @@
 	\noindent \@societe \\% On affiche le nom de la societe
 	\@address \\% On affiche l'adresse de la societe
 	\ifx\@dates\@undefined% si les dates de stage ne sont pas renseignees
-		\@date \\% affiche la date de compilation
-	\else% on ne fait rien, sinon
-		\@dates \\% on les affiche
-	\fi%
+		\@date% affiche la date de compilation
+	\else% sinon
+		\@dates% on les affiche
+	\fi \\%
 	\@supervisor \\% On affiche le nom du superviseur
 	\@author \\% On affiche le nom de l'auteur
 	\vfill%

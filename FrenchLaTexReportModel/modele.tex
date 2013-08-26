@@ -1,18 +1,38 @@
 \documentclass{frenchreport} % Appel de la classe pidupuis_rapport
 
 \include{config/config}% Fichier determinant la langue, les donnees d'auteur, etc
+\usepackage{lipsum}
 
 % CONTENTS
 \begin{document}
 
 % Page de garde
-\maketitle[gphy]% Ajout de la page de garde, "gphy" pour le skin gphy-like. Sans argument : commun.
-\newpage
+\maketitle[gphy]% Ajout de la page de garde.
+
+% roman
+\newpage%
+\pagenumbering{roman}% i,ii,iii,iv...
+
+% Remerciements
+\include{include/remerciements}%
 
 % Table des matieres
-\tableofcontents % Sans argument : Sommaire.
+\tableofcontents % Sans argument : Sommaire
+
+% arabic
+\pagenumbering{arabic}%
 
 % Corps du texte
-\include{include/export}
+\include{include/export}%
+
+% Roman
+\pagenumbering{Roman}%
+
+% Listes de figures
+\listoffigures%
+
+% Bibliographie
+\nocite{*}%
+\bibliography[Références]{2013_M1_Master_GPhy_Dupuis}%
 
 \end{document}
