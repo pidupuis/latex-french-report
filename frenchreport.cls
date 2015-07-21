@@ -1,6 +1,6 @@
 %% 
-%% Created by Pierre DUPUIS - 2012-2013
-%% Document class which modify the classical report to be closer the french student habits
+%% Created by Pierre DUPUIS - 2012-2015
+%% Document class for french reports
 %%
 %%
 
