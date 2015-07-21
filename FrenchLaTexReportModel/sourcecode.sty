@@ -26,8 +26,18 @@
 \definecolor{colString}{RGB}{133,6,6}
 \definecolor{colfont}{RGB}{239,239,239}
 
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+
 % Displaying specifications
-\lstset{basicstyle=\scriptsize, % Change la taille du code.
+\lstset{%basicstyle=\scriptsize, % Change la taille du code.
 		identifierstyle=\textbf{\color{colIdentifier}}, % Couleur des variables.
 		keywordstyle=\color{colKeys}, % Couleur des des fonctions.
 		stringstyle=\color{colString}, % Couleur des chaines de caractères.
@@ -41,11 +51,13 @@
 		frame=single, % Ajoute un cadre autour du code.
 		tabsize=2, % Modifie la taille des tabulations.
 		breaklines=true, % Fais automatiquement des retour à la ligne.
-		basicstyle=\ttfamily,
+		basicstyle=\scriptsize\ttfamily,
 		breakatwhitespace=false, % Pas de break quand espaces blancs.
 		xrightmargin=1cm, % Marge à droite.
 		xleftmargin=1cm, % Marge à gauche.
-		backgroundcolor=\color{colfont} % Couleur de font.
+		backgroundcolor=\color{colfont}, % Couleur de font.
+		rulecolor=\color{black}, % Couleur de la bordure.
+		language={} % Par defaut on ne specifie aucun langage.
 }
 
 %% Fin du package

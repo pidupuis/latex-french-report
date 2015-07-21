@@ -15,7 +15,8 @@
 % Packages
 \RequirePackage{fancyhdr}%
 \RequirePackage{graphicx}%
-\RequirePackage[colorlinks=true, linkcolor=black, urlcolor=black]{hyperref}
+\RequirePackage[numbers]{natbib}
+\RequirePackage[notocite]
 
 % Header and footer
 \fancypagestyle{plain}{
@@ -34,6 +35,7 @@
 	\setlength{\parskip}{0cm plus 0cm minus 0cm}% On retire l'interligne pour ne pas trop espacer les titres
 	\let\chapter\chapterOld% On remet l'ancienne version de chapter pour que le sommaire s'affiche convenablement
 	\renewcommand*\contentsname{\textsc{{#1}}}% On renomme le titre de la table des matiere avec l'argument (Sommaire par defaut)
+	\phantomsection%
 	\pdfbookmark{\contentsname}{toc}
 	\tableofcontentsOld% On affiche la table des matieres.
 	\newpage% On cree une nouvelle page.
@@ -47,6 +49,7 @@
 	\setlength{\parskip}{0cm plus 0cm minus 0cm}% On retire l'interligne pour ne pas trop espacer les titres
 	\let\chapter\chapterOld% On remet l'ancienne version de chapter pour que le sommaire s'affiche convenablement
 	\renewcommand*\listfigurename{\textsc{{#1}}}% On renomme le titre de la table des matiere avec l'argument (Liste des figures par defaut)
+	\phantomsection%
 	\addcontentsline{toc}{chapter}{\textsc{{#1}}}%
 	\listoffiguresOld% On affiche la table des matieres.
 	\thispagestyle{fancy}% On donne a la page de sommaire le style avec header et footer.
@@ -55,15 +58,34 @@
 	\setlength{\parskip}{0.5cm plus 0.5cm minus 0cm}% On replace l'interligne a 1.5 pour le reste du rapport.
 }%
 
+% List of tables
+\let\listoftablesOld\listoftables% On conserve l'ancienne commande pour eviter la recursivite.
+\renewcommand*\listoftables[1][Liste des tables] {%
+	\setlength{\parskip}{0cm plus 0cm minus 0cm}% On retire l'interligne pour ne pas trop espacer les titres
+	\let\chapter\chapterOld% On remet l'ancienne version de chapter pour que le sommaire s'affiche convenablement
+	\renewcommand*\listtablename{\textsc{{#1}}}% On renomme le titre de la table des matiere avec l'argument (Liste des figures par defaut)
+	\phantomsection%
+	\addcontentsline{toc}{chapter}{\textsc{{#1}}}%
+	\listoftablesOld% On affiche la table des matieres.
+	\thispagestyle{fancy}% On donne a la page de sommaire le style avec header et footer.
+	\newpage% On cree une nouvelle page.
+	\let\chapter\chapterNew% On remet ensuite la nouvelle version de chapter.
+	\setlength{\parskip}{0.5cm plus 0.5cm minus 0cm}% On replace l'interligne a 1.5 pour le reste du rapport.
+}%
+
+
 % Bibliography
+\bibliographystyle{unsrtnat} 
 \let\bibliographyOld\bibliography% On conserve l'ancienne commande pour eviter la recursivite.
 \renewcommand*\bibliography[2][Références] {%
-	\bibliographystyle{plain} 
 	\renewcommand{\bibname}{\textsc{{#1}}}
 	\setlength{\parskip}{0cm plus 0cm minus 0cm}% On retire l'interligne pour ne pas trop espacer les titres
 	\let\chapter\chapterOld% On remet l'ancienne version de chapter pour que le sommaire s'affiche convenablement
-	\addcontentsline{toc}{chapter}{\textsc{{#1}}}%
+	\phantomsection%
+	\addcontentsline{toc}{chapter}{\bibname}%
+	\begin{small}
 	\bibliographyOld{#2}% On affiche la table des matieres.
+	\end{small}
 	\newpage% On cree une nouvelle page.
 	\let\chapter\chapterNew% On remet ensuite la nouvelle version de chapter.
 	\setlength{\parskip}{0.5cm plus 0.5cm minus 0cm}% On replace l'interligne a 1.5 pour le reste du rapport.
@@ -73,6 +95,7 @@
 \newcommand*\remerciements[1][Remerciements]{%
 	\setlength{\parskip}{0cm plus 0cm minus 0cm}% On retire l'interligne pour ne pas trop espacer les titres
 	\let\chapter\chapterOld%
+	\phantomsection%
 	\addcontentsline{toc}{chapter}{\textsc{{#1}}}%
 	\chapter*{\textsc{{#1}}}%	
 	\vspace*{-10mm}%
@@ -91,6 +114,8 @@
 \let\chapterOld\chapter% On conserve la premiere version de la commande chapter pour eviter la recursivite
 \renewcommand*\chapter[1]{%
 	\refstepcounter{chapterCounter}%
+	\phantomsection%
+	\label{chap:\thechapterCounter}%
 	\addcontentsline{toc}{chapter}{\uppercase\expandafter{\romannumeral \thechapterCounter} \hspace*{5mm} \textsc{{#1}}}%
 	\chapterOld*{\uppercase\expandafter{\romannumeral \thechapterCounter} \hspace*{5mm} \textsc{{#1}}} % Chiffres romains majuscules
 	\vspace*{-10mm}%
@@ -98,17 +123,40 @@
 \let\chapterNew\chapter % On cree une commande contenant la version modifiee de chapter pour la remettre dans sommaire
 
 % Chapter sans numerotation (intro, conclu, ...)
+\newcounter{chapterExtraCounter}%
+\setcounter{chapterExtraCounter}{0}%
 \newcommand*\chapterExtra[1]{%
+	\refstepcounter{chapterExtraCounter}%
+	\let\chapter\chapterOld%
+	\phantomsection%
+	\label{chap:\thechapterExtraCounter}%
 	\addcontentsline{toc}{chapter}{\textsc{{#1}}}%
-	\chapterOld*{\textsc{{#1}}} % Chiffres romains majuscules
+	\chapter*{\textsc{{#1}}}%
+	\vspace*{-10mm}%
+	\let\chapter\chapterNew%
+}%
+
+% Annexes
+\newcounter{annexesCounter}%
+\setcounter{annexesCounter}{0}%
+\newcommand*\annexe[1]{%
+
+	\refstepcounter{annexesCounter}%
+	\phantomsection%
+	\label{chap:\Alph{annexesCounter}}%
+	\addcontentsline{toc}{chapter}{\Alph{annexesCounter} \hspace*{5mm} \textsc{{#1}}}%
+	\chapterOld*{\Alph{annexesCounter} \hspace*{5mm} \textsc{{#1}}} % Chiffres romains majuscules
 	\vspace*{-10mm}%
 }%
+
 
 % Section
 \let\sectionOld\section%
 \renewcommand*\section[1]{%
 	\refstepcounter{sectionCounter}%
 	\vspace*{-5mm}%
+	\phantomsection%
+	\label{sec:\thechapterCounter.\thesectionCounter}%
 	\addcontentsline{toc}{section}{\thechapterCounter.\thesectionCounter \hspace*{5mm} {#1}}%
     	\sectionOld*{\hspace*{8mm} \thechapterCounter.\thesectionCounter \hspace*{5mm} {#1}}%
 }%
@@ -118,26 +166,31 @@
 \renewcommand*\subsection[1]{%
 	\refstepcounter{subsectionCounter}%
 	\vspace*{0mm}%
+	\phantomsection%
+	\label{sec:\thechapterCounter.\thesectionCounter.\thesubsectionCounter}%
 	\addcontentsline{toc}{section}{\hspace*{5mm} \thechapterCounter.\thesectionCounter.\thesubsectionCounter \hspace*{5mm} {#1}}%
     	\subsectionOld*{\hspace*{16mm} \thechapterCounter.\thesectionCounter.\thesubsectionCounter \hspace*{5mm} {#1}}%
 }%
 
-% Subsection
+% Subsubsection
 \let\subsubsectionOld\subsubsection%
 \renewcommand*\subsubsection[1]{%
 	\refstepcounter{subsubsectionCounter}%
 	\vspace*{0mm}%
+	\phantomsection%
+	\label{sec:\thechapterCounter.\thesectionCounter.\thesubsectionCounter.\thesubsubsectionCounter}%
 	\addcontentsline{toc}{section}{\hspace*{10mm} \thechapterCounter.\thesectionCounter.\thesubsectionCounter.\thesubsubsectionCounter \hspace*{5mm} {#1}}%
     	\subsubsectionOld*{\hspace*{24mm} \thechapterCounter.\thesectionCounter.\thesubsectionCounter.\thesubsubsectionCounter \hspace*{5mm} {#1}}%
 }%
 
 % FIGURE
-\newcommand*\fig[3]{% Fonction qui affiche une image de maniere centree et accompagnee de sa legende
+\newcommand*\fig[4]{% Fonction qui affiche une image de maniere centree et accompagnee de sa legende
       \begin{figure}[h!]%
+	\phantomsection%
       \begin{center}%
       	\includegraphics[scale={#2}]{{#1}}%
-	\caption{{#3}}%
-	\label{{#3}}%
+	\caption{{#3}}% ALWAYS CAPTION BEFORE LABEL !
+	\label{#4}% ALWAYS LABEL AFTER CAPTION !
       \end{center}%
       \end{figure}%
 }%
@@ -145,9 +198,10 @@
 \newcommand*\figRotate[4]{% Fonction qui affiche une figure selon un certain angle de rotation (utile pour les figures au format paysage)
       \begin{figure}[h!]%
       \begin{center}%
+	\phantomsection%
       	\includegraphics[scale={#2}, angle={#4}]{{#1}}%
-	\caption{{#3}}%
-	\label{{#3}}%
+	\caption{{#3}}% ALWAYS CAPTION BEFORE LABEL !
+	\label{{#3}}% ALWAYS LABEL AFTER CAPTION !
       \end{center}%
       \end{figure}%
 }%
@@ -260,10 +314,10 @@
 	\noindent \@societe \\% On affiche le nom de la societe
 	\@address \\% On affiche l'adresse de la societe
 	\ifx\@dates\@undefined% si les dates de stage ne sont pas renseignees
-		\@date% affiche la date de compilation
-	\else% sinon
-		\@dates% on les affiche
-	\fi \\%
+		\@date \\% affiche la date de compilation
+	\else% on ne fait rien, sinon
+		\@dates \\% on les affiche
+	\fi%
 	\@supervisor \\% On affiche le nom du superviseur
 	\@author \\% On affiche le nom de l'auteur
 	\vfill%
@@ -284,4 +338,44 @@
 	\fi%
 	\newpage% On insere un saut de page
 }%
+
+% QUATRIEME DE COUVERTURE
+\newcommand\resume[1]{%
+	\newcommand\@resume{{#1}}% Si societe est invoque, on cree une variable du meme nom
+}%
+\newcommand\abstr[1]{%
+	\newcommand\@abstr{{#1}}% Si societe est invoque, on cree une variable du meme nom
+}%
+\newcommand\quatreCouv{%
+	\setlength{\parskip}{0.5cm plus 0.5cm minus 0cm}%
+	\thispagestyle{empty}
+	
+	\begin{small}
+	\begin{center} \textbf{\textsc{\@subtitle}} \end{center} \\
+	\vspace*{-1cm} \begin{flushright} \@author ,
+	\ifx\@dates\@undefined% si les dates de stage ne sont pas renseignees
+		\@date% affiche la date de compilation
+	\else% on ne fait rien, sinon
+		\@dates% on les affiche
+	\fi%
+	\end{flushright}
+	\par \noindent \hrulefill \\
+	\vspace*{-1cm} \begin{center} \textbf{\textsc{R\'{e}sum\'{e}}} \end{center}\par
+	\vspace*{-5mm} \begin{footnotesize} \@resume \end{footnotesize}
+	\par \noindent \hrulefill \\
+	\vspace*{-1cm} \begin{center} \textbf{\textsc{Abstract}} \end{center}\par
+	\vspace*{-5mm} \begin{footnotesize} \@abstr \end{footnotesize}
+	\par \noindent \hrulefill
+	\end{small}
+
+}%
+
+
+
+% Others
+\RequirePackage[colorlinks=true, linkcolor=black, urlcolor=black, citecolor=black]{hyperref}% change ref color; needs to be at the end of the document
+\RequirePackage[all]{hypcap}% to jump to the top of the image instead of the top of the caption; needs to be after hyperref
+\RequirePackage{color, colortbl}%
+\RequirePackage{footnote}%
+
 
