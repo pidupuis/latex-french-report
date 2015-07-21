@@ -1,14 +1,7 @@
 
-latex-french-report
-======================
+# latex-french-report
 
-Document class for french reports. Includes a
-Created by <a href="https://github.com/pidupuis">Pierre DUPUIS</a> - 2012-2015 <br />
-
-======================
-
-
-
+Document class for french reports
 
 ## Installation
 
